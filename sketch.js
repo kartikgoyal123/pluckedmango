@@ -1,95 +1,134 @@
-
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
-const Constraint = Matter.Constraint;
+const Render = Matter.Render;
+const Constraint=Matter.Constraint;
+var treeObj, stoneObj,groundObject, launcherObject;
+var mango1,mango2,mango3,mango4,mango5,mango6,mango7,mango8,mango9,mango10,mango11,mango12;
+var world,boy;
+var launchingForce=100;
 
-var ground,tree;
-var stone;
-var boy;
-var m1,m2,m3,m4,m5;
-var launcher1;
-
-function preload()
-{
-	boyImg = loadImage("Plucking mangoes/boy.png");
-}
+function preload(){
+	boy=loadImage("Plucking mangoes/boy.png");
+  }
 
 function setup() {
-	var canvas = createCanvas(1000,400);
-
+	createCanvas(1000,400);
 	engine = Engine.create();
 	world = engine.world;
 
-	//Create the Bodies Here.
-	ground = new Ground(600,height,1200,20);
-	tree = new Tree(800,200,350,400);
-	stone = new Stone(130,230,50,50);
-	m1 = new Mango(700,100,50,50);
-	m2 = new Mango(800,180,50,50);
-	m3 = new Mango(850,120,50,50);
-	m4 = new Mango(750,150,50,50);
-	m5 = new Mango(900,180,50,50);
-	launcher1 = new Launcher(stone.body,{x:130, y:230});
+	stoneObj=new Stone(130,230,50); 
 
+	mango1=new Mango(700,100,30);
+  mango2=new Mango(700,130,30);
+	mango3=new Mango(750,140,30);
+	mango4=new Mango(750,150,30);
+	mango5=new Mango(800,80,30);
+	mango6=new Mango(800,60,30);
+	mango7=new Mango(850,130,40);
+	mango8=new Mango(850,150,40);
+	mango9=new Mango(900,140,40);
+	mango10=new Mango(900,90,40);
+	mango11=new Mango(830,50,40);
+  mango12=new Mango(830,160,40);
+
+	treeObj=new Tree(800,200,350,400);
+	groundObject=new Ground(600,height,1200,20);
+	launcherObject=new Launcher(stoneObj.body,{x:130, y:230})
+  var render = Render.create({
+    element: document.body,
+    engine: engine,
+    options: {
+      width: 1300,
+      height: 600,
+      wireframes: false
+    }
+  });
+	
 	Engine.run(engine);
-
-	boy = createSprite(200,300,100,200);
-	boy.addImage(boyImg);
-	boy.scale=0.12;
-  
+ // Render.run(render);
 }
-
 
 function draw() {
-  rectMode(CENTER);
-  background(255);
-  tree.display(); 
-  ground.display();
-  stone.display();
-  launcher1.display();
-  m1.display();
-  m2.display();
-  m3.display();
-  m4.display();
-  m5.display();
-  detectollision(stone,m1);
-  detectollision(stone,m2);
-  detectollision(stone,m3);
-  detectollision(stone,m4);
-  detectollision(stone,m5);
-  drawSprites();
- 
+
+  background(230);
+  //frameRate(2)
+ // Engine.update(engine)
+  textSize(25);
+  text("Press Space to get a second Chance to Play!!",50 ,50);
+  image(boy ,100,150,200,300);
+  //Engine.update(engine)
+  
+
+  treeObj.display();
+  stoneObj.display();
+  mango1.display();
+  mango2.display();
+  mango3.display();
+  mango4.display();
+  mango6.display();
+ mango7.display();
+  mango8.display();
+  mango9.display();
+  mango10.display();
+  mango11.display();
+  mango12.display();
+  stoneObj.display();
+
+  groundObject.display();
+  launcherObject.display();
+  detectollision(stoneObj,mango1);
+  detectollision(stoneObj,mango2);
+  detectollision(stoneObj,mango3);
+  detectollision(stoneObj,mango4);
+  detectollision(stoneObj,mango5);
+  detectollision(stoneObj,mango6);
+  detectollision(stoneObj,mango7);
+  detectollision(stoneObj,mango8);
+  detectollision(stoneObj,mango9);
+  detectollision(stoneObj,mango10);
+  detectollision(stoneObj,mango11);
+  detectollision(stoneObj,mango12);
 }
-function mouseDragged(){
-    Matter.Body.setPosition(stone.body,{x:mouseX,y:mouseY});
+
+function mouseDragged()
+{
+	Matter.Body.setPosition(stoneObj.body, {x:mouseX, y:mouseY}) 
 }
 
-function mouseReleased(){
-    launcher1.fly();
-}
-
-function detectollision (lstone,lmango) {
-   mangobodypostion=lmango.body.postion;
-   stonebodypostion=lstone.body.postion;
-
-   var distance=dist(stonebodypostion.x,stonebodypostion.y,mangobodypostion.x,mangobodypostion.y);
-   if (distance<=lmango.r+lstone.r) {
-       Matter.body.setStatic(lmango.body,false)
-   }
-
-
+function mouseReleased()
+{
+	launcherObject.fly();
+    // distance=int(dist(stoneObj.x,stoneObj.y,mango1.x,mango1.y));
 }
 
 function keyPressed() {
 	if (keyCode === 32) {
-
-	  Matter.Body.setPosition(stone.body,{x:130,y:230});
-	  launcher1.attach(stone.body)
-
+    Matter.Body.setPosition(stoneObj.body, {x:130, y:230}) 
+	  launcherObject.attach(stoneObj.body);
 	}
-}
+  }
+
+  function detectollision(lstone,lmango){
+	/*var collision = Matter.SAT.collides(lstone,lmango);
+	if(collision.collided){
+		console.log("collided");
+		Matter.Body.setStatic(lmango,false);	
+	}*/
+  mangoBodyPosition=lmango.body.position
+  stoneBodyPosition=lstone.body.position
+  
+  var distance=dist(stoneBodyPosition.x, stoneBodyPosition.y, mangoBodyPosition.x, mangoBodyPosition.y)
+  //console.log(distance)
+ // console.log(lmango.r+lstone.r)
+  	if(distance<=lmango.r+lstone.r)
+    {
+      //console.log(distance);
+  	  Matter.Body.setStatic(lmango.body,false);
+    }
+
+  }
 
 
 
